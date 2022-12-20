@@ -24,6 +24,7 @@ const gameBoard = (() => {
         for (let i = 0; i < board.length; i++) {
             board[i] = "";
         }
+        displayController.updateBoard();
     };
 
     return { setField, getField, reset };
@@ -52,6 +53,12 @@ const gameController = (() => {
     const playerX = player("X");
     const playerO = player("O");
     let round = 1;
+
+    const restartBtn = document.querySelector('.restartBtn');
+
+    restartBtn.addEventListener('click', (e) => {
+        gameBoard.reset();
+    });
 
     const playRound = (index) => {
         gameBoard.setField(index, getCurrentPlayer());
