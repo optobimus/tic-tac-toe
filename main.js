@@ -13,7 +13,9 @@ const gameBoard = (() => {
 
     
     const setField = (index, sign) => {
-        board[index] = sign;
+        if (board[index] != "X" && board[index] != "O") {
+            board[index] = sign;
+        }
     };
 
     const getField = (index) => {
