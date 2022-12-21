@@ -9,7 +9,7 @@ const player = (sign) => {
 }
 
 const gameBoard = (() => {
-    const board = new Array(9);
+    const board = new Array(9).fill("");
     
     const setField = (index, sign) => {
         board[index] = sign;
@@ -56,9 +56,13 @@ const displayController = (() => {
         }
     };
 
-    const updateDisplayMessage = () => {
-        let msg = gameController.updateMessageContent();
-        message.textContent = msg;
+    const updateDisplayMessage = (winner) => {
+        if (gameController.checkWin()) {
+            message.textContent = "The winner is Player " + winner + "!";
+        } else {
+            message.textContent = gameController.updateMessageContent();
+        }
+        
     }
 
     return { updateBoard, updateDisplayMessage };
@@ -67,7 +71,7 @@ const displayController = (() => {
 const gameController = (() => {
     const playerX = player("X");
     const playerO = player("O");
-    let round = 1;
+    let round = 1, winner;
 
     const restartBtn = document.querySelector('.restartBtn');
 
@@ -78,15 +82,41 @@ const gameController = (() => {
     const playRound = (index) => {
         gameBoard.setField(index, getCurrentPlayer());
         displayController.updateDisplayMessage();
-        checkLogic(index);
+        if (checkWin(index)) {
+            displayController.updateDisplayMessage(setWinner());
+        }
         round++;
     };
+
+    const setWinner = () => {
+        winner = getCurrentPlayer();
+        return winner;
+    }
 
     const updateMessageContent = () => {
         return round % 2 === 1 ? "Player O's turn" : "Player X's turn";
     }
 
-    const checkLogic = (index) => {
+    const checkWin = (index) => {
+        if (gameBoard.getField(0) === gameBoard.getField(1) && gameBoard.getField(0) === gameBoard.getField(2) && gameBoard.getField(0) !== "") {
+            return true;
+        } else if (gameBoard.getField(3) === gameBoard.getField(4) && gameBoard.getField(3) === gameBoard.getField(5) && gameBoard.getField(3) !== "") {
+            return true;
+        } else if (gameBoard.getField(6) === gameBoard.getField(7) && gameBoard.getField(6) === gameBoard.getField(8) && gameBoard.getField(6) !== "") {
+            return true;
+        } else if (gameBoard.getField(0) === gameBoard.getField(3) && gameBoard.getField(0) === gameBoard.getField(6) && gameBoard.getField(0) !== "") {
+            return true;
+        } else if (gameBoard.getField(1) === gameBoard.getField(4) && gameBoard.getField(1) === gameBoard.getField(7) && gameBoard.getField(1) !== "") {
+            return true;   
+        } else if (gameBoard.getField(2) === gameBoard.getField(5) && gameBoard.getField(2) === gameBoard.getField(8) && gameBoard.getField(2) !== "") {
+            return true;
+        } else if (gameBoard.getField(0) === gameBoard.getField(4) && gameBoard.getField(0) === gameBoard.getField(8) && gameBoard.getField(0) !== "") {
+            return true;
+        } else if (gameBoard.getField(2) === gameBoard.getField(4) && gameBoard.getField(2) === gameBoard.getField(6) && gameBoard.getField(2) !== "") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     const getCurrentPlayer = () => {
@@ -94,6 +124,6 @@ const gameController = (() => {
     };
 
     
-    return { playRound, getCurrentPlayer, updateMessageContent };
+    return { playRound, getCurrentPlayer, updateMessageContent, checkWin, setWinner };
 })();
 
