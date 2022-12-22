@@ -43,7 +43,7 @@ const displayController = (() => {
 
     fieldElements.forEach((field) => 
         field.addEventListener('click', (e) => {
-            if (gameBoard.checkFree(e.target.dataset.index)) {
+            if (gameBoard.checkFree(e.target.dataset.index) && gameController.checkWin() !== "win" && gameController.checkWin() !== "tie") {
                 gameController.playRound(parseInt(e.target.dataset.index));
                 updateBoard();
             }
