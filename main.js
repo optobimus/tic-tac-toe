@@ -24,6 +24,8 @@ const gameBoard = (() => {
             board[i] = "";
         }
         displayController.updateBoard();
+        gameController.round = 1;
+        displayController.updateDisplayMessage();
     };
 
     const checkFree = (index) => {
